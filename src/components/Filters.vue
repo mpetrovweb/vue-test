@@ -1,18 +1,13 @@
 <template>
   <div class="actions">
     <div class="actions__inner">
-      <select name="filters" v-model="filterValue">
-        <option value="">- SHOW ALL -</option>
-        <option value="active">- SHOW ACTIVE -</option>
-        <option value="inactive">- SHOW INACTIVE -</option>
-        <option
-          v-for="bookmaker in bookmakers"
-          :value="bookmaker.id"
-          :key="'option-' + bookmaker.id"
-        >
-          {{bookmaker.name}}
-        </option>
-      </select>
+      
+
+      <Select2 
+        v-model="filterValue"
+        :options="[...options]"
+        :settings="{width: '100%'}"
+      />
     </div><!-- /.actions__inner -->
 
     <div class="actions__inner">
@@ -33,7 +28,6 @@
 
 <script>
 import Button from '@/components/Button';
-import { mapGetters } from 'vuex';
 
 export default {
 
@@ -45,12 +39,27 @@ export default {
 
   data () {
     return {
-      
+      defaultOptions: [
+        {
+          id: '',
+          text: '- SHOW ALL -'
+        },
+        {
+          id: 'active',
+          text: '- SHOW ACTIVE -'
+        },
+        {
+          id: 'inactive',
+          text: '- SHOW INACTIVE -'
+        }
+      ]
     }
   },
 
   computed: {
-    ...mapGetters(['bookmakers']),
+    options() {
+      return [...this.defaultOptions, ...this.$store.state.options]
+    },
 
     filterValue: {
       get: function() {
@@ -65,15 +74,15 @@ export default {
 
   methods: {
     checkAll() {
-        this.$store.commit('CHECK_ALL');
+      this.$store.commit('CHECK_ALL');
 
-        this.$store.commit('FILTER_BY', this.filterValue);
+      this.$store.commit('FILTER_BY', this.filterValue);
     },
 
     uncheckAll() {
-        this.$store.commit('UNCHECK_ALL');
+      this.$store.commit('UNCHECK_ALL');
 
-        this.$store.commit('FILTER_BY', this.filterValue);
+      this.$store.commit('FILTER_BY', this.filterValue);
     }
   }
 }

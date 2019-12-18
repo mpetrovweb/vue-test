@@ -9,7 +9,8 @@ const store = new Vuex.Store({
         bookmakers: [],
         countries: [],
         filteredBookmakers: [],
-        filterValue: ''
+        filterValue: '',
+        options: []
     },
 
     getters: {
@@ -29,7 +30,15 @@ const store = new Vuex.Store({
     mutations: {
         GET_BOOKMAKERS(state, response) {
             state.bookmakers = response;
+            
             state.filteredBookmakers = response;
+
+            state.options = response.map(item => {
+                return {
+                    id: item.id,
+                    text: item.name
+                }
+            });
         },
 
         GET_COUNTRIES(state, response) {
@@ -50,7 +59,7 @@ const store = new Vuex.Store({
 
         FILTER_BY(state, value) {
             state.filterValue = value;
-            
+
             switch(value) {
                 case 'active':
                     state.filteredBookmakers = state.bookmakers.filter(bookmaker => bookmaker.active == 1);
