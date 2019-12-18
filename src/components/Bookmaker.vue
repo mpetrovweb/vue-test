@@ -54,11 +54,11 @@ export default {
   computed: {
     isActive: {
       get: function() {
-        return this.payload.active;
+        return this.$store.getters.isActive(this.payload.id);
       },
 
       set: function() {
-        this.$store.commit('TOGGLE_ACTIVE', this.index);
+        this.$store.commit('TOGGLE_ACTIVE', this.payload.id);
       }
     },
 
@@ -67,7 +67,7 @@ export default {
 
   methods: {
     removeLink(key) {
-      this.$store.commit('REMOVE_LINk', [this.index, key]);
+      this.$store.commit('REMOVE_LINk', [this.payload.id, key]);
 
       // Trigger component re-render.
       // This is needed because the nested object values are not being watched

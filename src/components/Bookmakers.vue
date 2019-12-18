@@ -1,7 +1,7 @@
 <template>
   <div class="bookmakers">
     <Bookmaker
-      v-for="(bookmaker, index) in bookmakers"
+      v-for="(bookmaker, index) in filteredBookmakers"
       :key="'id-' + bookmaker.id"
       :payload="bookmaker"
       :index="index"
@@ -16,6 +16,7 @@ import { mapActions, mapGetters } from 'vuex';
 export default {
 
   name: 'Bookmakers',
+
   components: {
     Bookmaker
   },
@@ -27,7 +28,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['bookmakers', 'countries'])
+    ...mapGetters(['bookmakers', 'countries', 'filteredBookmakers'])
   },
 
   methods: {
