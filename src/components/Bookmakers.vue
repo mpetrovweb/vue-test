@@ -1,11 +1,17 @@
 <template>
   <div class="bookmakers">
-    <Bookmaker />
-  </div><!-- /.bookmakers -->
+    <Bookmaker
+      v-for="(bookmaker, index) in bookmakers"
+      :key="'id-' + bookmaker.id"
+      :payload="bookmaker"
+      :index="index"
+    />
+  </div>
 </template>
 
 <script>
-import Bookmaker from '@/components/Bookmaker'
+import Bookmaker from '@/components/Bookmaker';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
 
@@ -18,6 +24,19 @@ export default {
     return {
 
     }
+  },
+
+  computed: {
+    ...mapGetters(['bookmakers', 'countries'])
+  },
+
+  methods: {
+    ...mapActions(['getBookmakers', 'getCountries']),
+  },
+
+  created() {
+    this.getBookmakers();
+    this.getCountries();
   }
 }
 </script>

@@ -1,47 +1,77 @@
 <template>
   <div class="bookmaker">
-    <span class="bookmaker__index"></span>
+    <span class="bookmaker__index">{{index + 1}}</span>
 
     <div class="bookmaker__checkbox">
-      <input type="checkbox" id="checkbox">
+      <input type="checkbox" :id="'checkbox-' + index" v-model="isActive" />
 
-      <label for="checkbox"></label>
-    </div><!-- /.bookmaker__checkbox -->
+      <label :for="'checkbox-' + index"></label>
+    </div>
 
     <div class="bookmaker__content">
-      <img src="css/images/" alt="">
+      <img src="css/images/" alt="" />
 
-      <p></p>
-    </div><!-- /.bookmaker__content -->
+      <p>{{payload.name}}</p>
+    </div>
 
     <div class="bookmaker__actions">
       <div class="bookmaker__row">
-        <label for="field" class="bookmaker__label">Default</label>
+        <label :for="'field-' + index" class="bookmaker__label">Default</label>
 
-        <input type="text" id="field" class="bookmaker__field">
+        <input type="text" :id="'field-' + index" class="bookmaker__field" :value="payload.links ? payload.links.default : ''" />
 
         <button type="button" class="bookmaker__control"></button>
-      </div><!-- /.bookmaker__row -->
+      </div>
 
-      <div class="bookmaker__row">
-        <label for="field" class="bookmaker__label">Default</label>
+      <template v-for="(link, key) in payload.links">
+        <div class="bookmaker__row" v-if="!isDefault(key)" :key="key">
+          <label for="field" class="bookmaker__label">{{key}}</label>
 
-        <input type="text" id="field" class="bookmaker__field">
+          <input type="text" :id="'link-' + index + '-' + key" class="bookmaker__field" :value="link" />
 
-        <button type="button" class="bookmaker__control bookmaker__control--danger"></button>
-      </div><!-- /.bookmaker__row -->
-    </div><!-- /.bookmaker__actions -->
-  </div><!-- /.bookmaker -->
+          <button type="button" class="bookmaker__control bookmaker__control--danger" @click="removeLink(key)"></button>
+        </div>
+      </template>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
 
   name: 'Bookmaker',
+  props: {
+    payload: {
+      type: Object,
+      default: () => {}
+    },
 
-  data () {
-    return {
+    index: {
+      type: Number
+    }
+  },
 
+  computed: {
+    isActive: {
+      get: function() {
+        return this.payload.active;
+      },
+
+      set: function() {
+        this.$store.commit('TOGGLE_ACTIVE', this.index);
+      }
+    },
+
+    isDefault: () => (key) => key == 'default'
+  },
+
+  methods: {
+    removeLink(key) {
+      this.$store.commit('REMOVE_LINk', [this.index, key]);
+
+      // Trigger component re-render.
+      // This is needed because the nested object values are not being watched
+      this.$forceUpdate();
     }
   }
 }
@@ -51,6 +81,8 @@ export default {
 .bookmaker {
   display: flex;
   flex-flow: row nowrap;
+  padding: 27px 0;
+  border-bottom: 1px solid #D7DAE4;
 
   &__index {
     flex: 0 0 30px;
