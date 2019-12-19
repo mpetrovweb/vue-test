@@ -28,24 +28,24 @@
         <button type="button" class="bookmaker__control"></button>
       </div>
 
-      <template v-for="(link, key) in payload.links">
-        <div class="bookmaker__row" v-if="!isDefault(key)" :key="key">
+      <template v-for="link in links">
+        <div class="bookmaker__row" v-if="!isDefault(link.key)" :key="index + '-' + link.key">
           <div class="bookmaker__select">
             <Select2
               class="select-control"
-              :value="key"
+              :value="link.key"
               :options="countries"
               :settings="{width: '100%'}"
-              @select="updateLink($event.id, key, link)"
+              @select="updateLink($event.id, link.key, link.value)"
             />
           </div>
 
           <input
             type="text"
             class="bookmaker__field"
-            :id="'link-' + index + '-' + key"
-            :value="link"
-            @input="updateLink(key, key, $event.target.value)"
+            :id="'link-' + index + '-' + link.key"
+            :value="link.value"
+            @input="updateLink(link.key, link.key, $event.target.value)"
           />
 
           <button type="button" class="bookmaker__control bookmaker__control--danger" @click="removeLink(key)"></button>
@@ -70,6 +70,12 @@ export default {
     }
   },
 
+  data () {
+    return {
+      links: []
+    }
+  },
+
   computed: {
     isActive: {
       get: function() {
@@ -90,7 +96,7 @@ export default {
           text: country.code
         }
       })
-    }
+    },
   },
 
   methods: {
@@ -102,11 +108,28 @@ export default {
       this.$forceUpdate();
     },
 
-    updateLink(newKey, key, link) {
-      this.removeLink(key);
+    updateLink(newKey, oldKey, link) {
+      this.removeLink(oldKey);
 
       this.$store.commit('ADD_LINK', [this.payload.id, newKey, link]);
+
+      const index = this.links.findIndex(link => link.key == oldKey);
+
+      this.links[index] = { key: newKey, value: link };
+    },
+
+    computeLinks() {
+      for (let key in this.payload.links) {
+        this.links.push({
+          key,
+          value: this.payload.links[key]
+        })
+      }
     }
+  },
+
+  mounted() {
+    this.computeLinks();
   }
 }
 </script>
