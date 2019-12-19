@@ -25,7 +25,7 @@
           :value="payload.links ? payload.links.default : ''"
         />
 
-        <button type="button" class="bookmaker__control"></button>
+        <button type="button" class="bookmaker__control" @click="addLink"></button>
       </div>
 
       <template v-for="link in links">
@@ -34,7 +34,7 @@
             <Select2
               class="select-control"
               :value="link.key"
-              :options="countries"
+              :options="unOccupiedCountries"
               :settings="{width: '100%'}"
               @select="updateLink($event.id, link.key, link.value)"
             />
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+
 export default {
 
   name: 'Bookmaker',
@@ -72,11 +73,14 @@ export default {
 
   data () {
     return {
-      links: []
+      links: [],
+      unOccupiedCountries: [],
+      occupiedCountries: new Set()
     }
   },
 
   computed: {
+
     isActive: {
       get: function() {
         return this.$store.getters.isActive(this.payload.id);
@@ -93,19 +97,49 @@ export default {
       return this.$store.state.countries.map(country => {
         return {
           id: country.code,
-          text: country.code
+          text: country.code,
+          disabled: false
         }
       })
     },
   },
 
+  watch: {
+    countries: {
+      deep: true,
+      handler: function(val) {
+        if (this.payload.links) {
+          for (let key in this.payload.links) {
+            if ( key != 'default' ) {
+              this.occupiedCountries.add(key);
+            }
+          }
+        }
+
+        this.unOccupiedCountries = val.map(country => {
+          country.disabled = [...this.occupiedCountries].includes(country.id);
+
+          return country;
+        });
+      }
+    }
+  },
+
   methods: {
     removeLink(key) {
-      this.$store.commit('REMOVE_LINk', [this.payload.id, key]);
+      this.removeLinkFromStore(key);
+
+      this.occupiedCountries.delete(key);
+
+      this.updateDisabledCountries();
 
       const index = this.links.findIndex(link => link.key == key);
 
       this.links.splice(index, 1);
+    },
+
+    removeLinkFromStore(key) {
+      this.$store.commit('REMOVE_LINk', [this.payload.id, key]);
 
       // Trigger component re-render.
       // This is needed because the nested object values are not being watched
@@ -113,13 +147,20 @@ export default {
     },
 
     updateLink(newKey, oldKey, link) {
-      this.removeLink(oldKey);
+      this.removeLinkFromStore(oldKey);
 
       this.$store.commit('ADD_LINK', [this.payload.id, newKey, link]);
 
+      // Update local entries
       const index = this.links.findIndex(link => link.key == oldKey);
 
       this.links[index] = { key: newKey, value: link };
+
+      //Update countries restrictions
+      this.occupiedCountries.delete(oldKey);
+      this.occupiedCountries.add(newKey);
+
+      this.updateDisabledCountries();
     },
 
     computeLinks() {
@@ -129,6 +170,25 @@ export default {
           value: this.payload.links[key]
         })
       }
+    },
+
+    addLink() {
+      const isLastItemEmpty = this.links[this.links.length - 1].key == '';
+
+      if ( !isLastItemEmpty ) {
+        this.links.push({
+          key: '',
+          value: ''
+        })
+      }
+    },
+
+    updateDisabledCountries() {
+      this.unOccupiedCountries = this.unOccupiedCountries.map(country => {
+        country.disabled = [...this.occupiedCountries].includes(country.id);
+
+        return country;
+      });
     }
   },
 
