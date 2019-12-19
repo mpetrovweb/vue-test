@@ -1,9 +1,8 @@
 <template>
   <div class="actions">
-    <div class="actions__inner">
-      
-
-      <Select2 
+    <div class="actions__inner actions__inner--expand">
+      <Select2
+        class="select-control"
         v-model="filterValue"
         :options="[...options]"
         :settings="{width: '100%'}"
@@ -96,6 +95,10 @@ export default {
     & + & {
       margin-left: 8px;
     }
+  }
+
+  &__inner--expand {
+    flex: 1;
   }
 }
 </style>

@@ -15,8 +15,8 @@ export default {
 }
 </script>
 
-<style>
-@import './assets/reset.css';
+<style lang="scss">
+@import './assets/scss/main';
 
 #app {
   font-family: 'Roboto', Helvetica, Arial, sans-serif;

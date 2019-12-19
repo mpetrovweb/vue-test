@@ -40,7 +40,8 @@ export default {
 
   svg {
     display: inline-block;
-    vertical-align: middle; 
+    margin-right: 4px;
+    vertical-align: middle;
   }
 
   &--primary {

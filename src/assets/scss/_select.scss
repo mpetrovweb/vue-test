@@ -1,0 +1,26 @@
+.select-control .select2-container--default {
+    .select2-selection--single .select2-selection__rendered {
+        line-height: 38px;
+    }
+
+    .select2-selection--single {
+        height: 40px;
+        border-radius: 2px/4px;
+        border-color: #E4E7F1;
+    }
+
+    .select2-selection--single .select2-selection__arrow {
+        height: 40px;
+    }
+
+    &.select2-container--open {
+        .select2-selection--single {
+            border-color: #aaa;
+        }
+    }
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background: linear-gradient(to bottom,  #3875d7 0%,#2a62bc 100%);
+    color: #fff;
+}

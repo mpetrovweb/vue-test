@@ -46,6 +46,7 @@ export default {
 }
 
 .actions {
+  margin-bottom: 17px;
   text-align: left;
 }
 </style>
