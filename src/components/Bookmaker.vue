@@ -48,7 +48,7 @@
             @input="updateLink(link.key, link.key, $event.target.value)"
           />
 
-          <button type="button" class="bookmaker__control bookmaker__control--danger" @click="removeLink(key)"></button>
+          <button type="button" class="bookmaker__control bookmaker__control--danger" @click="removeLink(link.key)"></button>
         </div>
       </template>
     </div>
@@ -102,6 +102,10 @@ export default {
   methods: {
     removeLink(key) {
       this.$store.commit('REMOVE_LINk', [this.payload.id, key]);
+
+      const index = this.links.findIndex(link => link.key == key);
+
+      this.links.splice(index, 1);
 
       // Trigger component re-render.
       // This is needed because the nested object values are not being watched
