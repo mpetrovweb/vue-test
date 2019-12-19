@@ -18,16 +18,35 @@
       <div class="bookmaker__row">
         <label :for="'field-' + index" class="bookmaker__label">Default</label>
 
-        <input type="text" :id="'field-' + index" class="bookmaker__field" :value="payload.links ? payload.links.default : ''" />
+        <input
+          type="text"
+          class="bookmaker__field"
+          :id="'field-' + index"
+          :value="payload.links ? payload.links.default : ''"
+        />
 
         <button type="button" class="bookmaker__control"></button>
       </div>
 
       <template v-for="(link, key) in payload.links">
         <div class="bookmaker__row" v-if="!isDefault(key)" :key="key">
-          <label for="field" class="bookmaker__label">{{key}}</label>
+          <div class="bookmaker__select">
+            <Select2
+              class="select-control"
+              :value="key"
+              :options="countries"
+              :settings="{width: '100%'}"
+              @select="updateLink($event.id, key, link)"
+            />
+          </div>
 
-          <input type="text" :id="'link-' + index + '-' + key" class="bookmaker__field" :value="link" />
+          <input
+            type="text"
+            class="bookmaker__field"
+            :id="'link-' + index + '-' + key"
+            :value="link"
+            @input="updateLink(key, key, $event.target.value)"
+          />
 
           <button type="button" class="bookmaker__control bookmaker__control--danger" @click="removeLink(key)"></button>
         </div>
@@ -62,7 +81,16 @@ export default {
       }
     },
 
-    isDefault: () => (key) => key == 'default'
+    isDefault: () => (key) => key == 'default',
+
+    countries: function() {
+      return this.$store.state.countries.map(country => {
+        return {
+          id: country.code,
+          text: country.code
+        }
+      })
+    }
   },
 
   methods: {
@@ -72,6 +100,12 @@ export default {
       // Trigger component re-render.
       // This is needed because the nested object values are not being watched
       this.$forceUpdate();
+    },
+
+    updateLink(newKey, key, link) {
+      this.removeLink(key);
+
+      this.$store.commit('ADD_LINK', [this.payload.id, newKey, link]);
     }
   }
 }
@@ -170,6 +204,12 @@ export default {
     background: rgba(#7B839A, .21);
     font-size: 15px;
     color: #395669;
+  }
+
+  &__select {
+    flex: 0 1 140px;
+    padding-right: 17px;
+    text-align: left;
   }
 
   &__control {

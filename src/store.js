@@ -24,13 +24,13 @@ const store = new Vuex.Store({
             const index = state.bookmakers.findIndex(bookmaker => bookmaker.id == id);
 
             return state.bookmakers[index].active;
-        } 
+        }
     },
 
     mutations: {
         GET_BOOKMAKERS(state, response) {
             state.bookmakers = response;
-            
+
             state.filteredBookmakers = response;
 
             state.options = response.map(item => {
@@ -55,6 +55,12 @@ const store = new Vuex.Store({
             const index = state.bookmakers.findIndex(bookmaker => bookmaker.id == id);
 
             delete state.bookmakers[index].links[key];
+        },
+
+        ADD_LINK(state, [id, key, link]) {
+            const index = state.bookmakers.findIndex(bookmaker => bookmaker.id == id);
+
+            state.bookmakers[index].links[key] = link;
         },
 
         FILTER_BY(state, value) {
