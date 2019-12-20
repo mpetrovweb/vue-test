@@ -89,6 +89,7 @@ export default {
 
       set: function() {
         this.$store.commit('TOGGLE_ACTIVE', this.payload.id);
+        this.$store.commit('FILTER_BY', this.$store.state.filterValue);
       }
     },
 
@@ -201,10 +202,20 @@ export default {
 
 <style lang="scss">
 .bookmaker {
+  position: relative;
   display: flex;
   flex-flow: row nowrap;
-  padding: 27px 0;
-  border-bottom: 1px solid #D7DAE4;
+  padding: 27px 15px 28px;
+  margin: 0 -15px;
+
+  &:after {
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+    border-bottom: 1px solid #D7DAE4;
+    content: '';
+  }
 
   &__index {
     flex: 0 0 30px;

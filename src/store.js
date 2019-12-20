@@ -20,6 +20,8 @@ const store = new Vuex.Store({
 
         filteredBookmakers: state => state.filteredBookmakers,
 
+        filterValue: state => state.filterValue,
+
         isActive: (state) => (id) => {
             const index = state.bookmakers.findIndex(bookmaker => bookmaker.id == id);
 
@@ -100,6 +102,17 @@ const store = new Vuex.Store({
             state.bookmakers.forEach(bookmaker => {
                 bookmaker.active = 0;
             });
+        },
+
+        REORDER_BOOKMAKERS(state, bookmakers) {
+            bookmakers.map((bookmaker, index) => {
+                bookmaker.order = index + 1;
+
+                return bookmaker;
+            });
+
+            state.bookmakers = bookmakers;
+            state.filteredBookmakers = bookmakers;
         }
     },
 

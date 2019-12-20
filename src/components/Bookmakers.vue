@@ -1,16 +1,21 @@
 <template>
   <div class="bookmakers">
-    <Bookmaker
-      v-for="(bookmaker, index) in filteredBookmakers"
-      :key="'id-' + bookmaker.id"
-      :payload="bookmaker"
-      :index="index"
-    />
+    <draggable v-model="filteredBookmakers" :disabled="!!filterValue">
+      <transition-group>
+          <Bookmaker
+            v-for="(bookmaker, index) in filteredBookmakers"
+            :key="'id-' + bookmaker.id"
+            :payload="bookmaker"
+            :index="index"
+          />
+      </transition-group>
+  </draggable>
   </div>
 </template>
 
 <script>
 import Bookmaker from '@/components/Bookmaker';
+import draggable from 'vuedraggable';
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
@@ -18,7 +23,8 @@ export default {
   name: 'Bookmakers',
 
   components: {
-    Bookmaker
+    Bookmaker,
+    draggable
   },
 
   data () {
@@ -28,7 +34,16 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['bookmakers', 'countries', 'filteredBookmakers'])
+    ...mapGetters(['bookmakers', 'countries', 'filterValue']),
+
+    filteredBookmakers: {
+      get() {
+        return this.$store.state.filteredBookmakers;
+      },
+      set(value) {
+        this.$store.commit('REORDER_BOOKMAKERS', value);
+      }
+    }
   },
 
   methods: {
