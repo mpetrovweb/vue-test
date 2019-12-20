@@ -1,5 +1,5 @@
 <template>
-  <div class="bookmakers">
+  <div class="bookmakers" v-if="countries.length">
     <draggable v-model="filteredBookmakers" :disabled="!!filterValue">
       <transition-group>
           <Bookmaker
@@ -7,6 +7,7 @@
             :key="'id-' + bookmaker.id"
             :payload="bookmaker"
             :index="index"
+            :countries="countries"
           />
       </transition-group>
   </draggable>

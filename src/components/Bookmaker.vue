@@ -35,7 +35,7 @@
             <Select2
               class="select-control"
               :value="link.key"
-              :options="unOccupiedCountries"
+              :options="localCountries"
               :settings="{width: '100%'}"
               @select="updateLink($event.id, link.key, link.value)"
             />
@@ -69,13 +69,18 @@ export default {
 
     index: {
       type: Number
+    },
+
+    countries: {
+      type: Array,
+      default: () => {}
     }
   },
 
   data () {
     return {
       links: [],
-      unOccupiedCountries: [],
+      localCountries: [],
       occupiedCountries: new Set()
     }
   },
@@ -95,19 +100,23 @@ export default {
 
     isDefault: () => (key) => key == 'default',
 
-    countries: function() {
+    /*countries: function() {
       return this.$store.state.countries.map(country => {
-        return {
+        const countryObj = {
           id: country.code,
           text: country.code,
           disabled: false
-        }
+        };
+
+        this.setCountries(countryObj);
+
+        return countryObj;
       })
-    },
+    },*/
   },
 
   watch: {
-    countries: {
+    /*countries: {
       deep: true,
       handler: function(val) {
         if (this.payload.links) {
@@ -118,13 +127,13 @@ export default {
           }
         }
 
-        this.unOccupiedCountries = val.map(country => {
+        this.localCountries = val.map(country => {
           country.disabled = [...this.occupiedCountries].includes(country.id);
 
           return country;
         });
       }
-    }
+    }*/
   },
 
   methods: {
@@ -174,6 +183,24 @@ export default {
       }
     },
 
+    computeCountries() {
+      if (this.payload.links) {
+        for (let key in this.payload.links) {
+          if ( key != 'default' ) {
+            this.occupiedCountries.add(key);
+          }
+        }
+      }
+
+      this.localCountries = this.countries.map(country => {
+        return {
+            id: country.code,
+            text: country.code,
+            disabled: [...this.occupiedCountries].includes(country.id)
+          };
+      });
+    },
+
     addLink() {
       const isLastItemEmpty = this.links[this.links.length - 1].key == '';
 
@@ -186,7 +213,7 @@ export default {
     },
 
     updateDisabledCountries() {
-      this.unOccupiedCountries = this.unOccupiedCountries.map(country => {
+      this.localCountries = this.localCountries.map(country => {
         country.disabled = [...this.occupiedCountries].includes(country.id);
 
         return country;
@@ -196,6 +223,8 @@ export default {
 
   mounted() {
     this.computeLinks();
+
+    this.computeCountries();
   }
 }
 </script>
