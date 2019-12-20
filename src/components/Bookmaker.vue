@@ -23,9 +23,10 @@
           class="bookmaker__field"
           :id="'field-' + index"
           :value="payload.links ? payload.links.default : ''"
+          @input="updateLink('default', 'default', $event.target.value)"
         />
 
-        <button type="button" class="bookmaker__control" @click="addLink"></button>
+        <button type="button" class="bookmaker__control" @click="addLink" :disabled="!payload.links"></button>
       </div>
 
       <template v-for="link in links">
@@ -152,7 +153,7 @@ export default {
       this.$store.commit('ADD_LINK', [this.payload.id, newKey, link]);
 
       // Update local entries
-      const index = this.links.findIndex(link => link.key == oldKey);
+      const index = this.links.findIndex(item => item.key == oldKey);
 
       this.links[index] = { key: newKey, value: link };
 
@@ -310,6 +311,10 @@ export default {
 
     &:hover {
       opacity: .8;
+    }
+
+    &[disabled] {
+      background-color: #aaa;
     }
 
     &:before,

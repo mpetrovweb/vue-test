@@ -54,11 +54,17 @@ const store = new Vuex.Store({
         REMOVE_LINk(state, [id, key]) {
             const index = state.bookmakers.findIndex(bookmaker => bookmaker.id == id);
 
-            delete state.bookmakers[index].links[key];
+            if (state.bookmakers[index].links) {
+                delete state.bookmakers[index].links[key];
+            }
         },
 
         ADD_LINK(state, [id, key, link]) {
             const index = state.bookmakers.findIndex(bookmaker => bookmaker.id == id);
+
+            if ( !state.bookmakers[index].links ) {
+                state.bookmakers[index].links = {};
+            }
 
             state.bookmakers[index].links[key] = link;
         },
