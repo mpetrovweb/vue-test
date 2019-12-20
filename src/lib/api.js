@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 class API {
   constructor() {
 
@@ -22,6 +24,17 @@ class API {
         return response.json()
       })
       .then(data => {
+        return data;
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }
+
+  save_bookmakers(data) {
+    return axios.post('./data/', data)
+      .then(data => {
+        console.log(data);
         return data;
       })
       .catch(err => {

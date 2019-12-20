@@ -2,7 +2,7 @@
   <div class="main">
     <div class="main__head">
       <div class="actions">
-        <Button type="button">Save</Button>
+        <Button type="button" @click="saveBookmakers">Save</Button>
       </div><!-- /.actions -->
 
       <Filters />
@@ -31,6 +31,12 @@ export default {
 
   data () {
     return {
+
+    }
+  },
+
+  methods: {
+    saveBookmakers() {
 
     }
   }
