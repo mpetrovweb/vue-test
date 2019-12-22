@@ -31,8 +31,8 @@ class API {
       })
   }
 
-  save_bookmakers(data) {
-    return axios.post('./data/', data)
+  save_bookmakers() {
+    return axios.post('')
       .then(data => {
         console.log(data);
         return data;

@@ -124,9 +124,9 @@ const store = new Vuex.Store({
 
         },
 
-        saveBookmakers({commit}) {
-            api.get_bookmakers().then(response => {
-                commit('GET_BOOKMAKERS', response);
+        saveBookmakers({state}) {
+            api.save_bookmakers(state.bookmakers).then(() => {
+                
             })
 
         },

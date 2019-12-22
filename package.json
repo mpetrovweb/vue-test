@@ -5,8 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "json": "json-server --watch public/data/bookies.json"
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@babel/core": "^7.4.5",

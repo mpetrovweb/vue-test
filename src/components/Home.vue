@@ -2,7 +2,7 @@
   <div class="main">
     <div class="main__head">
       <div class="actions">
-        <Button type="button" @click="saveBookmakers">Save</Button>
+        <Button type="button" @click.native="saveBookmakers">Save</Button>
       </div><!-- /.actions -->
 
       <Filters />
@@ -37,7 +37,7 @@ export default {
 
   methods: {
     saveBookmakers() {
-
+      this.$store.dispatch('saveBookmakers');
     }
   }
 }
