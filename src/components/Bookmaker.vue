@@ -98,42 +98,7 @@ export default {
       }
     },
 
-    isDefault: () => (key) => key == 'default',
-
-    /*countries: function() {
-      return this.$store.state.countries.map(country => {
-        const countryObj = {
-          id: country.code,
-          text: country.code,
-          disabled: false
-        };
-
-        this.setCountries(countryObj);
-
-        return countryObj;
-      })
-    },*/
-  },
-
-  watch: {
-    /*countries: {
-      deep: true,
-      handler: function(val) {
-        if (this.payload.links) {
-          for (let key in this.payload.links) {
-            if ( key != 'default' ) {
-              this.occupiedCountries.add(key);
-            }
-          }
-        }
-
-        this.localCountries = val.map(country => {
-          country.disabled = [...this.occupiedCountries].includes(country.id);
-
-          return country;
-        });
-      }
-    }*/
+    isDefault: () => (key) => key == 'default'
   },
 
   methods: {
