@@ -113,6 +113,19 @@ const store = new Vuex.Store({
 
             state.bookmakers = bookmakers;
             state.filteredBookmakers = bookmakers;
+        },
+
+        CHECK_DEFAULT_LINKS(state) {
+            state.bookmakers.map(bookmaker => {
+                const shouldDeleteLinks = bookmaker.links ? bookmaker.links.default === '' : false;
+
+                // Remove links object if the default link is empty
+                if ( shouldDeleteLinks ) {
+                    delete bookmaker.links;
+                }
+
+                return bookmaker;
+            });
         }
     },
 
@@ -124,7 +137,9 @@ const store = new Vuex.Store({
 
         },
 
-        saveBookmakers({state}) {
+        saveBookmakers({commit, state}) {
+            commit('CHECK_DEFAULT_LINKS');
+
             api.save_bookmakers(state.bookmakers).then(() => {
                 
             })
