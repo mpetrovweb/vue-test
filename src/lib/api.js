@@ -1,12 +1,10 @@
 import {
-  importStorage,
-  importFunctions
+  importStorage
 } from './firebase';
 
 class API {
-  constructor(storage, functions) {
+  constructor(storage) {
     this.storage = storage;
-    this.functions = functions;
     this.proxy = 'https://cors-anywhere.herokuapp.com/';
   }
 
