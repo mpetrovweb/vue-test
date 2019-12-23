@@ -1,23 +1,28 @@
 <template>
-  <div class="bookmakers" v-if="countries.length">
-    <draggable v-model="filteredBookmakers" :disabled="!!filterValue">
-      <transition-group>
-          <Bookmaker
-            v-for="(bookmaker, index) in filteredBookmakers"
-            :key="'id-' + bookmaker.id"
-            :payload="bookmaker"
-            :index="index"
-            :countries="countries"
-          />
-      </transition-group>
-  </draggable>
+  <div class="bookmakers" >
+    <Loader v-if="!countries.length" />
+
+    <template v-if="countries.length">
+      <draggable v-model="filteredBookmakers" :disabled="!!filterValue">
+        <transition-group>
+            <Bookmaker
+              v-for="(bookmaker, index) in filteredBookmakers"
+              :key="'id-' + bookmaker.id"
+              :payload="bookmaker"
+              :index="index"
+              :countries="countries"
+            />
+        </transition-group>
+      </draggable>
+    </template>
   </div>
 </template>
 
 <script>
 import Bookmaker from '@/components/Bookmaker';
+import Loader from '@/components/Loader';
 import draggable from 'vuedraggable';
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
 
@@ -25,13 +30,8 @@ export default {
 
   components: {
     Bookmaker,
-    draggable
-  },
-
-  data () {
-    return {
-
-    }
+    draggable,
+    Loader
   },
 
   computed: {
@@ -45,15 +45,6 @@ export default {
         this.$store.commit('REORDER_BOOKMAKERS', value);
       }
     }
-  },
-
-  methods: {
-    ...mapActions(['getBookmakers', 'getCountries']),
-  },
-
-  created() {
-    this.getBookmakers();
-    this.getCountries();
   }
 }
 </script>

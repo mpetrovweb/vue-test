@@ -140,9 +140,7 @@ const store = new Vuex.Store({
         saveBookmakers({commit, state}) {
             commit('CHECK_DEFAULT_LINKS');
 
-            api.save_bookmakers(state.bookmakers).then(() => {
-                
-            })
+            api.save_bookmakers('/bookies.json', state.bookmakers);
 
         },
 

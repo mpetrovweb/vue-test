@@ -2,7 +2,7 @@
   <div class="main">
     <div class="main__head">
       <div class="actions">
-        <Button type="button" @click.native="saveBookmakers">Save</Button>
+        <Button @click.native="saveBookmakers">Save</Button>
       </div><!-- /.actions -->
 
       <Filters />
@@ -15,9 +15,10 @@
 </template>
 
 <script>
-import Button from '@/components/Button'
-import Filters from '@/components/Filters'
-import Bookmakers from '@/components/Bookmakers'
+import Button from '@/components/Button';
+import Filters from '@/components/Filters';
+import Bookmakers from '@/components/Bookmakers';
+import { mapActions } from 'vuex';
 
 export default {
 
@@ -36,9 +37,16 @@ export default {
   },
 
   methods: {
+    ...mapActions(['getBookmakers', 'getCountries']),
+
     saveBookmakers() {
       this.$store.dispatch('saveBookmakers');
     }
+  },
+
+  created() {
+    this.getBookmakers();
+    this.getCountries();
   }
 }
 </script>

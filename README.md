@@ -20,5 +20,3 @@ yarn build
 yarn lint
 ```
 
-### Run express server
-node server.js
