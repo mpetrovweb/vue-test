@@ -78,6 +78,5 @@ class API {
 }
 
 export default new API(
-  importStorage,
-  importFunctions
+  importStorage
 );
